@@ -75,3 +75,4 @@ C:\Users\iShinta\SkyDrive\Classes\MIS333K-Lucy\Assignments\Ho_MinhTri_HW6\Ho_Min
 C:\Users\iShinta\SkyDrive\Classes\MIS333K-Lucy\Assignments\Ho_MinhTri_HW6\Ho_MinhTri_HW6\obj\Release\Ho_MinhTri_HW6.csproj.GenerateResource.Cache
 C:\Users\iShinta\SkyDrive\Classes\MIS333K-Lucy\Assignments\Ho_MinhTri_HW6\Ho_MinhTri_HW6\obj\Release\Ho_MinhTri_HW6.dll
 C:\Users\iShinta\SkyDrive\Classes\MIS333K-Lucy\Assignments\Ho_MinhTri_HW6\Ho_MinhTri_HW6\obj\Release\Ho_MinhTri_HW6.pdb
+C:\Users\homin\OneDrive\Classes\MIS333K-Lucy\Assignments\Ho_MinhTri_HW6\Ho_MinhTri_HW6\obj\Release\Ho_MinhTri_HW6.csprojResolveAssemblyReference.cache

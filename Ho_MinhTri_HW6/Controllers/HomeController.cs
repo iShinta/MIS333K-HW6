@@ -8,30 +8,39 @@ using Ho_MinhTri_HW6.Models;
 
 namespace Ho_MinhTri_HW6.Controllers
 {
+    public enum Gender { All, Male, Female }
+    public enum ComparativeSales { Greater, Less }
+
     public class HomeController : Controller
     {
         private AppDbContext db = new AppDbContext();
 
-        public enum Gender { All, Male, Female}
-        public enum ComparativeSales { Greater, Less}
-
         // GET: Home
         public ActionResult Index(String SearchString)
         {
+            ViewBag.NumberOfCustomers = db.Customers.Count();
+            List<Customer> SelectedCustomers = new List<Customer>();
+
             //************************************************************************************
             //TODO: Code for textbox searching (textbox contains a string
             //SearchString is the string from the first textbox
             if (SearchString == null || SearchString == "") //they didn't select anything
             {
                 ViewBag.SearchString = "Search string was null";
-                return View(db.Customers.ToList());
+
+                SelectedCustomers = db.Customers.ToList();
             }
             else //they picked something
             {
                 ViewBag.SearchString = "The search string is " + SearchString;
-                return View();
+
+                SelectedCustomers = db.Customers.Where(c => c.FirstName.Contains(SearchString) || c.LastName.Contains(SearchString)).ToList();
             }
             //*************************************************************************************
+
+            ViewBag.NumberofSelectedCustomers = SelectedCustomers.Count();
+            SelectedCustomers.OrderBy(c => c.LastName).ThenBy(c => c.FirstName).ThenBy(c => c.AverageSale);
+            return View(SelectedCustomers);
         }
 
         public ActionResult DetailedSearch()
@@ -43,23 +52,29 @@ namespace Ho_MinhTri_HW6.Controllers
 
         public ActionResult SearchResults(String SearchString, Frequency SelectedFrequency, Gender SelectedGender, String AverageSales, ComparativeSales SelectedSales)
         {
+            ViewBag.NumberOfCustomers = db.Customers.Count();
+            var query = from c in db.Customers
+                        select c;
+
             //************************************************************************************
             //TODO: Code for textbox searching (textbox contains a string
             //SearchString is the string from the first textbox
             if (SearchString == null || SearchString == "") //they didn't select anything
             {
-                ViewBag.SearchString = "Search string was null";
+                ViewBag.NameSearch = "Search string was null";
             }
             else //they picked something
             {
-                ViewBag.SearchString = "The search string is " + SearchString;
+                ViewBag.NameSearch = "The search string is " + SearchString;
+
+                query = query.Where(c => c.FirstName.Contains(SearchString) || c.LastName.Contains(SearchString));
             }
             //*************************************************************************************
 
             //********************************************************************************************************
             //TODO: Code for drop-down list
             //Selected frequency is the selected value from the dropdown
-            if (SelectedFrequency.FrequencyID == 0) // they chose "all frequencies" from the drop-down
+            /*if (SelectedFrequency.FrequencyID == 0) // they chose "all frequencies" from the drop-down
             {
                 ViewBag.SelectedFrequency = "No frequency was selected";
             }
@@ -68,7 +83,7 @@ namespace Ho_MinhTri_HW6.Controllers
                 //List<Month> AllMonths = MonthUtilities.GetMonths();
                 //Month MonthToDisplay = AllMonths.Find(m => m.MonthID == SelectedMonth);
                 ViewBag.SelectedFrequency = "The selected frequency is " + SelectedFrequency.Name;
-            }
+            }*/
             //*********************************************************************************************************
 
             //*************************************************************************************
@@ -125,7 +140,7 @@ namespace Ho_MinhTri_HW6.Controllers
                 //Add value to ViewBag
                 //ViewBag.UpdatedGPA = "The updated GPA is " + decGPA.ToString("n2");
             }
-            else  //they didn't specify GPA
+            else  //they didn't specify Average Sales
             {
                 ViewBag.Message = "No Average Sales was specified";
             }
@@ -148,7 +163,16 @@ namespace Ho_MinhTri_HW6.Controllers
             }
             //*****************************************************************************************
 
-            return View();
+            //Sort the data
+            //SelectedCustomers = SelectedCustomers.OrderBy(c => c.LastName).ThenBy(c => c.FirstName).ThenBy(c => c.AverageSale);
+
+            //Execute the query
+            List<Customer> SelectedCustomers = query.ToList();
+
+            //Count the number of results
+            ViewBag.NumberofSelectedCustomers = SelectedCustomers.Count();
+
+            return View("Index", SelectedCustomers);
         }
 
         public SelectList GetAllFrequencies()
