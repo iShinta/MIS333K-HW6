@@ -50,7 +50,7 @@ namespace Ho_MinhTri_HW6.Controllers
             return View();
         }
 
-        public ActionResult SearchResults(String SearchString, Frequency SelectedFrequency, Gender SelectedGender, String AverageSales, ComparativeSales SelectedSales)
+        public ActionResult SearchResults(String SearchString, Int16 SelectedFrequency, Gender SelectedGender, String AverageSales, ComparativeSales SelectedSales)
         {
             ViewBag.NumberOfCustomers = db.Customers.Count();
             var query = from c in db.Customers
@@ -74,16 +74,47 @@ namespace Ho_MinhTri_HW6.Controllers
             //********************************************************************************************************
             //TODO: Code for drop-down list
             //Selected frequency is the selected value from the dropdown
-            /*if (SelectedFrequency.FrequencyID == 0) // they chose "all frequencies" from the drop-down
+            if (SelectedFrequency == 0) // they chose "all frequencies" from the drop-down
             {
                 ViewBag.SelectedFrequency = "No frequency was selected";
             }
             else //frequency was chosen
             {
-                //List<Month> AllMonths = MonthUtilities.GetMonths();
-                //Month MonthToDisplay = AllMonths.Find(m => m.MonthID == SelectedMonth);
-                ViewBag.SelectedFrequency = "The selected frequency is " + SelectedFrequency.Name;
-            }*/
+                switch (SelectedFrequency)
+                {
+                    case 1:
+                        query = query.Where(c => c.Frequency.Name == "Daily");
+                        break;
+                    case 2:
+                        query = query.Where(c => c.Frequency.Name == "Monthly");
+                        break;
+                    case 3:
+                        query = query.Where(c => c.Frequency.Name == "Never");
+                        break;
+                    case 4:
+                        query = query.Where(c => c.Frequency.Name == "Often");
+                        break;
+                    case 5:
+                        query = query.Where(c => c.Frequency.Name == "Once");
+                        break;
+                    case 6:
+                        query = query.Where(c => c.Frequency.Name == "Seldom");
+                        break;
+                    case 7:
+                        query = query.Where(c => c.Frequency.Name == "Weekly");
+                        break;
+                    case 8:
+                        query = query.Where(c => c.Frequency.Name == "Yearly");
+                        break;
+                    case 9:
+                        query = query.Where(c => c.Frequency.Name == "Not Used");
+                        break;
+                    default:
+                        break;
+                }
+
+                ViewBag.SelectedFrequency = "The selected frequency is " + SelectedFrequency;
+            }
             //*********************************************************************************************************
 
             //*************************************************************************************
@@ -96,9 +127,11 @@ namespace Ho_MinhTri_HW6.Controllers
                     break;
                 case Gender.Male:
                     ViewBag.SelectedClassfication = "The selected gender is Male";
+                    query = query.Where(c => c.Gender == "Male");
                     break;
                 case Gender.Female:
                     ViewBag.SelectedClassfication = "The selected gender is Female";
+                    query = query.Where(c => c.Gender == "Female");
                     break;
                 default:
                     ViewBag.SelectedClassification = "No gender selected";
@@ -116,55 +149,46 @@ namespace Ho_MinhTri_HW6.Controllers
                 try
                 {
                     decAverageSales = Convert.ToDecimal(AverageSales);
+
+                    //*************************************************************************************
+                    //TODO: Code for radio buttons
+                    //Figure out selected class
+                    switch (SelectedSales)
+                    {
+                        case ComparativeSales.Greater:
+                            ViewBag.SelectedClassification = "The selected sales is Greater";
+                            query = query.Where(c => c.AverageSale >= decAverageSales);
+                            break;
+                        case ComparativeSales.Less:
+                            ViewBag.SelectedClassfication = "The selected sales is Less";
+                            query = query.Where(c => c.AverageSale <= decAverageSales);
+                            break;
+                        default:
+                            ViewBag.SelectedClassification = "No sales selected";
+                            break;
+                    }
+                    //*****************************************************************************************
                 }
                 catch  //this code will display when something is wrong
                 {
                     //Add a message for the viewbag
                     ViewBag.Message = AverageSales + "is not valid number. Please try again";
 
-                    //Re-populate dropdown
-                    //ViewBag.AllMonths = GetAllMonths();
-                    //ViewBag.AllDays = GetAllDays();
-
                     //Send user back to home page
                     return View("Index");
                 }
 
-
-                //Do some math with this number to prove it's a number
-                //decGPA += 100;  //this is a stupid thing to do; 
-                                //You wouldn't want to do it in real life. 
-                                //I'm just showing you that it is a number
-                                //and not a string.
-
                 //Add value to ViewBag
-                //ViewBag.UpdatedGPA = "The updated GPA is " + decGPA.ToString("n2");
+                ViewBag.SalesSearch = "The average sales selected is " + decAverageSales.ToString("n2");
             }
             else  //they didn't specify Average Sales
             {
-                ViewBag.Message = "No Average Sales was specified";
+                ViewBag.SalesSearch = "No Average Sales was specified";
             }
-            //*********************************************************************************************************
-
-            //*************************************************************************************
-            //TODO: Code for radio buttons
-            //Figure out selected class
-            switch (SelectedSales)
-            {
-                case ComparativeSales.Greater:
-                    ViewBag.SelectedClassification = "The selected sales is Greater";
-                    break;
-                case ComparativeSales.Less:
-                    ViewBag.SelectedClassfication = "The selected sales is Less";
-                    break;
-                default:
-                    ViewBag.SelectedClassification = "No sales selected";
-                    break;
-            }
-            //*****************************************************************************************
+            //********************************************************************************************************
 
             //Sort the data
-            //SelectedCustomers = SelectedCustomers.OrderBy(c => c.LastName).ThenBy(c => c.FirstName).ThenBy(c => c.AverageSale);
+            query = query.OrderBy(c => c.LastName).ThenBy(c => c.FirstName).ThenBy(c => c.AverageSale);
 
             //Execute the query
             List<Customer> SelectedCustomers = query.ToList();
