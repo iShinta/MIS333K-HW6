@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "DetailedSearch";
+}
+
+<h2>DetailedSearch</h2>
+
+@using (Html.BeginForm("SearchResults", "Home", FormMethod.Get))
+{
+    <p class="form-group">
+        Name: @Html.TextBox("SearchString", null, new { @class = "form-control" }) <br />
+
+        @Html.DropDownList("SelectedFrequency", (SelectList)ViewBag.AllFrequencies, new { @class = "form-control" })
+
+        <div class="form-group">
+            <label class="radio">@Html.RadioButton("SelectedGender", Gender.All, true)All</label>
+            <label class="radio">@Html.RadioButton("SelectedGender", Gender.Female)Female</label>
+            <label class="radio">@Html.RadioButton("SelectedGender", Gender.Male)Male</label>
+        </div>
+
+        Average Sales:<br />@Html.TextBox("AverageSales", null, new { @class = "form-control" }) <br />
+        
+        <div class="form-group">
+            <label class="radio">@Html.RadioButton("SelectedSales", ComparativeSales.Greater, true)Greater Than</label>
+            <label class="radio">@Html.RadioButton("SelectedSales", ComparativeSales.Less)Less Than</label>
+        </div>
+
+        <input type="submit" value="Search" class="btn btn-default" />
+    </p>
+}

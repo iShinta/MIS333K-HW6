@@ -1,26 +1,11 @@
 ﻿@model IEnumerable<Ho_MinhTri_HW6.Models.Customer>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "SearchResults";
 }
 
-<h2>Index</h2>
+<h2>SearchResults</h2>
 
-@using (Html.BeginForm())
-{
-    <p class="form-group">
-        Search: @Html.TextBox("SearchString", null, new { @class = "form-control" }) <br />
-        <input type="submit" value="Search" class="btn btn-default" />
-        @Html.ActionLink("Advanced Search", "DetailedSearch", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-default" })
-    </p>
-}
-
-<!--
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
--->
 <table class="table">
     <tr>
         <th>
@@ -41,10 +26,10 @@
         <th>
             @Html.DisplayNameFor(model => model.ReferredFrom)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Frequency)
-        </th>
+        <th></th>
     </tr>
+    @ViewBag.SearchString
+    Salut
 
 @foreach (var item in Model) {
     <tr>
@@ -66,16 +51,6 @@
         <td>
             @Html.DisplayFor(modelItem => item.ReferredFrom)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Frequency.Name)
-        </td>
-        <!--
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CustomerID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CustomerID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CustomerID })
-        </td>
-        -->
     </tr>
 }
 
