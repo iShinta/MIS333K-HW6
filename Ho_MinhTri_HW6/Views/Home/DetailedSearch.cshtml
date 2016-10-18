@@ -1,4 +1,5 @@
 ﻿@using Ho_MinhTri_HW6.Controllers
+@model Ho_MinhTri_HW6.Models.Customer
 
 @{
     ViewBag.Title = "DetailedSearch";
@@ -8,18 +9,24 @@
 
 @using (Html.BeginForm("SearchResults", "Home", FormMethod.Get))
 {
-    <p class="form-group">
-        Name: @Html.TextBox("SearchString", null, new { @class = "form-control" }) <br />
-
-        @Html.DropDownList("SelectedFrequency", (SelectList)ViewBag.AllFrequencies, new { @class = "form-control" })
-
+    <p class="form-horizontal">
+        <div class="form-group">
+            Name: @Html.TextBox("SearchString", null, new { @class = "form-control" })
+        </div>
+        
+        <div class="form-group">
+            @Html.DropDownList("SelectedFrequency", (SelectList)ViewBag.AllFrequencies, new { @class = "form-control" })
+        </div>
+        
         <div class="form-group">
             <label class="radio">@Html.RadioButton("SelectedGender", Gender.All, true)All</label>
             <label class="radio">@Html.RadioButton("SelectedGender", Gender.Female)Female</label>
             <label class="radio">@Html.RadioButton("SelectedGender", Gender.Male)Male</label>
         </div>
 
-        Average Sales:<br />@Html.TextBox("AverageSales", null, new { @class = "form-control" }) <br />
+        <div class="form-group">
+            Average Sales:<br />@Html.TextBox("AverageSales", null, new { @class = "form-control" })
+        </div>
         
         <div class="form-group">
             <label class="radio">@Html.RadioButton("SelectedSales", ComparativeSales.Greater, true)Greater Than</label>

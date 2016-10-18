@@ -11,6 +11,7 @@ namespace Ho_MinhTri_HW6.Controllers
     public enum Gender { All, Male, Female }
     public enum ComparativeSales { Greater, Less }
 
+    [HandleError]
     public class HomeController : Controller
     {
         private AppDbContext db = new AppDbContext();
@@ -141,7 +142,7 @@ namespace Ho_MinhTri_HW6.Controllers
 
             //*********************************************************************************************************
             //TODO: Code for textbox with numeric input
-            //see if they specified something for GPA
+            //see if they specified something for AverageSales
             if (AverageSales != null && AverageSales != "")
             //make sure string is a valid number
             {
